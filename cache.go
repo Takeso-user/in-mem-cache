@@ -39,6 +39,7 @@ func (c *Cache) Delete(key string) bool {
 	_, existed := c.data[key]
 	if existed {
 		delete(c.data, key)
+		return true
 	}
-	return existed
+	return false
 }
