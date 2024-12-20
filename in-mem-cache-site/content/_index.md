@@ -1,6 +1,8 @@
 # in-mem-cache
 
-`in-mem-cache` is a simple in-memory cache library for Go. It provides methods to set, get, and delete values in a cache stored in memory. This library is useful for temporarily storing data that needs fast access without relying on an external storage system.
+`in-mem-cache` is a simple in-memory cache library for Go. It provides methods to set, get, and delete values in a cache
+stored in memory. This library is useful for temporarily storing data that needs fast access without relying on an
+external storage system.
 
 ## Features
 
@@ -13,22 +15,24 @@
 To install the package, run:
 
 ```bash
-go get -u github.com/Takeso-user/in-mem-cache
+go get -u github.com/Takeso-user/in-mem-chache
 ```
+
 ## Usage
 
 Below is an example of how to use the in-mem-cache package in your project:
+
 ```go
 package main
 
 import (
     "fmt"
-	"github.com/Takeso-user/in-mem-cache/cache"
+    "github.com/Takeso-user/in-mem-cache/cache"
 )
 
 func main() {
     // Initialize a new cache
-	cache := cache.NewCache(10 * time.Second)
+    cache := cache.NewCache(10 * time.Second)
 
     // Set a value in the cache
     cache.Set("userId", 42)
@@ -55,22 +59,29 @@ func main() {
 ```
 
 ## API
+
 ### Set
+
 ```go
 Set(key string, value interface{})
 ```
+
 Stores a value in the cache under the specified key.
 
 ### Get
+
 ```go
 Get(key string) (interface{}, bool)
 ```
+
 Retrieves a value from the cache by key. Returns the value and a boolean indicating if the key was found.
 
 ### Delete
+
 ```go
 Delete(key string) bool
 ```
+
 Removes the value associated with key from the cache. Returns true if the key was found and deleted, otherwise false.
 
 Contributing
