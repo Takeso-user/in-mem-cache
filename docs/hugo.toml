@@ -2,3 +2,4 @@ baseURL = "https://takeso-user.github.io/in-mem-cache"
 languageCode = 'en-us'
 title = 'in-mem-cache-site'
 theme = 'Archie'
+disableKinds = ["RSS"]
