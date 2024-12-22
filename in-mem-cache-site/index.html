@@ -1,0 +1,55 @@
+---
+layout: default
+title: Home
+---
+<h1>in-mem-cache</h1>
+<p><strong>in-mem-cache</strong> is a simple in-memory cache library for Go. It provides methods to set, get, and delete
+    values in a cache stored in memory. This library is useful for temporarily storing data that needs fast access
+    without relying on an external storage system.</p>
+
+<h2>Features</h2>
+<ul>
+    <li><strong>Set</strong>: Store a value in the cache with a specified key.</li>
+    <li><strong>Get</strong>: Retrieve a value from the cache by key.</li>
+    <li><strong>Delete</strong>: Remove a value from the cache by key.</li>
+</ul>
+
+<h2>Installation</h2>
+<pre><code>go get -u github.com/Takeso-user/in-mem-cache</code></pre>
+
+<h2>Usage</h2>
+<pre><code>
+package main
+
+import (
+    "fmt"
+    "github.com/Takeso-user/in-mem-cache/cache"
+)
+
+func main() {
+    // Initialize a new cache
+    cache := cache.NewCache(10 * time.Second)
+
+    // Set a value in the cache
+    cache.Set("userId", 42)
+
+    // Get a value from the cache
+    userId, found := cache.Get("userId")
+    if found {
+        fmt.Println("UserID:", userId) // Output: UserID: 42
+    } else {
+        fmt.Println("UserID not found")
+    }
+
+    // Delete a value from the cache
+    cache.Delete("userId")
+
+    // Try to get the deleted value
+    userId, found = cache.Get("userId")
+    if found {
+        fmt.Println("UserID:", userId)
+    } else {
+        fmt.Println("UserID not found") // Output: UserID not found
+    }
+}
+</code></pre>
