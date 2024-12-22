@@ -35,9 +35,9 @@ Renders a menu for the given menu ID.
 {{- end }}
 <li>
     <a
-            $k, $v :=$attrs printf range {{-
-            {{- }} " %s=%q" $k $v | safeHTMLAttr }}
-    {{- end }}
+        {{- range $k, $v := $attrs }}
+        {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+        {{- end }}
     >{{ $name }}</a>
     {{- with .Children }}
     <ul>
