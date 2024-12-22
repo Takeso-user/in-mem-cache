@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport"><!-- Begin Jekyll SEO tag v2.8.0 -->
+    <title>Home | in-mem-cache</title>
+    <meta content="Jekyll v4.3.4" name="generator"/>
+    <meta content="Home" property="og:title"/>
+    <meta content="en_US" property="og:locale"/>
+    <meta content="A simple in-memory cache library for Go. This library is thread safe and easy to use and is in stage of active development."
+          name="description"/>
+    <meta content="A simple in-memory cache library for Go. This library is thread safe and easy to use and is in stage of active development."
+          property="og:description"/>
+    <link href="http://localhost:4000/in-mem-cache/" rel="canonical"/>
+    <meta content="http://localhost:4000/in-mem-cache/" property="og:url"/>
+    <meta content="in-mem-cache" property="og:site_name"/>
+    <meta content="website" property="og:type"/>
+    <meta content="summary" name="twitter:card"/>
+    <meta content="Home" property="twitter:title"/>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "description": "A simple in-memory cache library for Go. This library is thread safe and easy to use and is in stage of active development.",
+            "headline": "Home",
+            "name": "in-mem-cache",
+            "url": "http://localhost:4000/in-mem-cache/"
+        }</script>
+    <!-- End Jekyll SEO tag -->
+    <link href="/in-mem-cache/assets/main.css" rel="stylesheet">
+    <link href="http://localhost:4000/in-mem-cache/feed.xml" rel="alternate" title="in-mem-cache"
+          type="application/atom+xml"/>
+</head>
+<body>
+<header class="site-header" role="banner">
+
+    <div class="wrapper"><a class="site-title" href="/in-mem-cache/" rel="author">in-mem-cache</a>
+        <nav class="site-nav">
+            <input class="nav-trigger" id="nav-trigger" type="checkbox"/>
+            <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg height="15px" viewBox="0 0 18 15" width="18px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+            </label>
+
+            <div class="trigger"><a class="page-link" href="/in-mem-cache/about/">About</a><a class="page-link"
+                                                                                              href="/in-mem-cache/">Home</a>
+            </div>
+        </nav>
+    </div>
+</header>
+<main aria-label="Content" class="page-content">
+    <div class="wrapper">
+        <h1>in-mem-cache</h1>
+        <p><strong>in-mem-cache</strong> is a simple in-memory cache library for Go. It provides methods to set, get,
+            and delete values in a cache stored in memory. This library is useful for temporarily storing data that
+            needs fast access without relying on an external storage system.</p>
+
+        <h2>Features</h2>
+        <ul>
+            <li><strong>Set</strong>: Store a value in the cache with a specified key.</li>
+            <li><strong>Get</strong>: Retrieve a value from the cache by key.</li>
+            <li><strong>Delete</strong>: Remove a value from the cache by key.</li>
+        </ul>
+
+        <h2>Installation</h2>
+        <pre><code>go get -u github.com/Takeso-user/in-mem-cache</code></pre>
+
+        <h2>Usage</h2>
+        <pre><code>
+package main
+
+import (
+    "fmt"
+    "github.com/Takeso-user/in-mem-cache/cache"
+)
+
+func main() {
+    // Initialize a new cache
+    cache := cache.NewCache(10 * time.Second)
+
+    // Set a value in the cache
+    cache.Set("userId", 42)
+
+    // Get a value from the cache
+    userId, found := cache.Get("userId")
+    if found {
+        fmt.Println("UserID:", userId) // Output: UserID: 42
+    } else {
+        fmt.Println("UserID not found")
+    }
+
+    // Delete a value from the cache
+    cache.Delete("userId")
+
+    // Try to get the deleted value
+    userId, found = cache.Get("userId")
+    if found {
+        fmt.Println("UserID:", userId)
+    } else {
+        fmt.Println("UserID not found") // Output: UserID not found
+    }
+}
+</code></pre>
+    </div>
+</main>
+<footer class="site-footer h-card">
+    <data class="u-url" href="/in-mem-cache/"></data>
+
+    <div class="wrapper">
+
+        <h2 class="footer-heading">in-mem-cache</h2>
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col footer-col-1">
+                <ul class="contact-list">
+                    <li class="p-name">in-mem-cache</li>
+                    <li><a class="u-email" href="mailto:in_mem_cache@yahoo.com">in_mem_cache@yahoo.com</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col footer-col-2">
+                <ul class="social-media-list">
+                    <li><a href="https://github.com/jekyll">
+                        <svg class="svg-icon">
+                            <use xlink:href="/in-mem-cache/assets/minima-social-icons.svg#github"></use>
+                        </svg>
+                        <span class="username">jekyll</span></a></li>
+                    <li><a href="https://www.twitter.com/jekyllrb">
+                        <svg class="svg-icon">
+                            <use xlink:href="/in-mem-cache/assets/minima-social-icons.svg#twitter"></use>
+                        </svg>
+                        <span class="username">jekyllrb</span></a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col footer-col-3">
+                <p>A simple in-memory cache library for Go. This library is thread safe and easy to use and is in stage
+                    of active development.</p>
+            </div>
+        </div>
+
+    </div>
+
+</footer>
+</body>
+
+</html>
