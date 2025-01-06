@@ -8,11 +8,12 @@ import (
 )
 
 func TestSet(t *testing.T) {
-	c := NewCache(time.Second * 10)
+	c := NewCache()
 	key := "userId"
 	value := 42
+	ttl := time.Second * 10
 
-	c.Set(key, value)
+	c.Set(key, value, ttl)
 
 	val, found := c.Get(key)
 	assert.True(t, found, "expected key to be found")
@@ -20,8 +21,9 @@ func TestSet(t *testing.T) {
 }
 
 func TestCache_Expiration(t *testing.T) {
-	cache := NewCache(1 * time.Second)
-	cache.Set("key1", "value1")
+	cache := NewCache()
+	ttl := 1 * time.Second
+	cache.Set("key1", "value1", ttl)
 	time.Sleep(2 * time.Second)
 
 	_, ok := cache.Get("key1")
@@ -29,11 +31,12 @@ func TestCache_Expiration(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	c := NewCache(time.Second * 10)
+	c := NewCache()
 	key := "userId"
 	value := 42
+	ttl := time.Second * 10
 
-	c.Set(key, value)
+	c.Set(key, value, ttl)
 
 	val, found := c.Get(key)
 	assert.True(t, found, "expected key to be found")
@@ -45,11 +48,12 @@ func TestGet(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	c := NewCache(time.Second * 10)
+	c := NewCache()
 	key := "userId"
 	value := 42
+	ttl := time.Second * 10
 
-	c.Set(key, value)
+	c.Set(key, value, ttl)
 
 	deleted := c.Delete(key)
 	assert.True(t, deleted, "expected true for existing key")

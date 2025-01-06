@@ -7,36 +7,37 @@ import (
 )
 
 type MCache interface {
-	Set(key string, value interface{}) bool
+	Set(key string, value interface{}, ttl time.Duration) bool
 	Get(key string) (interface{}, bool)
 	Delete(key string) bool
 }
 
 type Cache struct {
-	data       map[string]interface{}
-	ttl        time.Duration
-	timestamps map[string]time.Time
-	mu         sync.RWMutex
-	cancelFunc context.CancelFunc
+	data        map[string]interface{}
+	timestamps  map[string]time.Time
+	expirations map[string]time.Duration
+	mu          sync.RWMutex
+	cancelFunc  context.CancelFunc
 }
 
-func NewCache(ttl time.Duration) *Cache {
+func NewCache() *Cache {
 	ctx, cancel := context.WithCancel(context.Background())
 	cache := &Cache{
-		data:       make(map[string]interface{}),
-		timestamps: make(map[string]time.Time),
-		ttl:        ttl,
-		cancelFunc: cancel,
+		data:        make(map[string]interface{}),
+		timestamps:  make(map[string]time.Time),
+		expirations: make(map[string]time.Duration),
+		cancelFunc:  cancel,
 	}
 	go cache.startEvWorker(ctx)
 	return cache
 }
 
-func (c *Cache) Set(key string, value interface{}) bool {
+func (c *Cache) Set(key string, value interface{}, ttl time.Duration) bool {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.data[key] = value
 	c.timestamps[key] = time.Now()
+	c.expirations[key] = ttl
 	return true
 }
 
@@ -47,7 +48,7 @@ func (c *Cache) Get(key string) (interface{}, bool) {
 	if !exists {
 		return nil, false
 	}
-	if time.Since(c.timestamps[key]) > c.ttl {
+	if time.Since(c.timestamps[key]) > c.expirations[key] {
 		go c.Delete(key)
 		return nil, false
 	}
@@ -61,13 +62,14 @@ func (c *Cache) Delete(key string) bool {
 	if existed {
 		delete(c.data, key)
 		delete(c.timestamps, key)
+		delete(c.expirations, key)
 		return true
 	}
 	return false
 }
 
 func (c *Cache) startEvWorker(ctx context.Context) {
-	ticker := time.NewTicker(c.ttl)
+	ticker := time.NewTicker(time.Minute)
 	defer ticker.Stop()
 
 	for {
@@ -85,9 +87,10 @@ func (c *Cache) evictExpiredKeys() {
 	defer c.mu.Unlock()
 
 	for key, timestamp := range c.timestamps {
-		if time.Since(timestamp) > c.ttl {
+		if time.Since(timestamp) > c.expirations[key] {
 			delete(c.timestamps, key)
 			delete(c.data, key)
+			delete(c.expirations, key)
 		}
 	}
 }
