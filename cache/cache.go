@@ -2,6 +2,9 @@ package cache
 
 import (
 	"context"
+	"encoding/json"
+	"log"
+	"os"
 	"sync"
 	"time"
 )
@@ -10,6 +13,8 @@ type MCache interface {
 	Set(key string, value interface{}, ttl time.Duration) bool
 	Get(key string) (interface{}, bool)
 	Delete(key string) bool
+	SaveToFile(filename string) error
+	LoadFromFile(filename string) error
 }
 
 type Cache struct {
@@ -97,4 +102,62 @@ func (c *Cache) evictExpiredKeys() {
 
 func (c *Cache) Stop() {
 	c.cancelFunc()
+}
+
+type cacheData struct {
+	Data        map[string]interface{}
+	Timestamps  map[string]time.Time
+	Expirations map[string]time.Duration
+}
+
+func (c *Cache) SaveToFile(filename string) error {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
+
+	data := cacheData{
+		Data:        c.data,
+		Timestamps:  c.timestamps,
+		Expirations: c.expirations,
+	}
+
+	encoder := json.NewEncoder(file)
+	return encoder.Encode(data)
+}
+
+func (c *Cache) LoadFromFile(filename string) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	file, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
+
+	var data cacheData
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&data); err != nil {
+		return err
+	}
+
+	c.data = data.Data
+	c.timestamps = data.Timestamps
+	c.expirations = data.Expirations
+	return nil
 }

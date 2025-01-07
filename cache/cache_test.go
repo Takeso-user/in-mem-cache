@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -64,4 +65,52 @@ func TestDelete(t *testing.T) {
 
 	deleted = c.Delete("nonExistingKey")
 	assert.False(t, deleted, "expected false for non-existing key")
+}
+
+func TestSaveToFile(t *testing.T) {
+	c := NewCache()
+	key := "userId"
+	var value float64 = 42
+	ttl := time.Second * 10
+
+	c.Set(key, value, ttl)
+
+	err := c.SaveToFile("test_cache.json")
+	assert.NoError(t, err, "expected no error when saving cache to file")
+
+	defer func() {
+		err := os.Remove("test_cache.json")
+		if err != nil {
+			t.Error("expected no error when removing test cache file")
+		}
+	}()
+}
+
+func TestLoadFromFile(t *testing.T) {
+	c := NewCache()
+	key := "userId"
+	var value float64 = 42
+	ttl := time.Second * 10
+
+	c.Set(key, value, ttl)
+	err := c.SaveToFile("test_cache.json")
+	if err != nil {
+		t.Error("expected no error when saving cache to file")
+		return
+	}
+
+	defer func() {
+		err := os.Remove("test_cache.json")
+		if err != nil {
+			t.Error("expected no error when removing test cache file")
+		}
+	}()
+
+	newCache := NewCache()
+	err = newCache.LoadFromFile("test_cache.json")
+	assert.NoError(t, err, "expected no error when loading cache from file")
+
+	val, found := newCache.Get(key)
+	assert.True(t, found, "expected key to be found in loaded cache")
+	assert.Equal(t, value, val, "expected value to be equal in loaded cache")
 }
