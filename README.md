@@ -112,6 +112,23 @@ LoadFromFile(filename string) error
 
 Loads the cache state from a file.
 
+##  Metrics and Monitoring
+This project includes metrics and monitoring using Prometheus and Grafana. The following metrics are exposed:
+
+- `cache_hits_total`: Total number of cache hits.
+- `cache_misses_total`: Total number of cache misses.
+- `cache_evictions_total`: Total number of cache evictions.
+- `cache_size`: Current size of the cache.
+
+
+### Setting Up Metrics
+
+1. **Start the Metrics Server**:
+   The metrics server is started automatically when you initialize the cache. By default, it listens on `:8080`.
+
+   ```go
+   StartMetricsServer(":8080")
+   ```
 ## Contributing
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
